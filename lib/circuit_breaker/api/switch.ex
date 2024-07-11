@@ -25,7 +25,7 @@ defmodule CircuitBreaker.Api.Switch do
   def half_open({:call, from}, :get_positions, data) do
     case CircuitBreaker.Api.GithubJobs.get_positions() do
       {:ok, positions} ->
-        {:next_state, :closed, %{count_error: 0}, {:reply, from, {:ok, positions}}}
+        {:next_state, :closed, %{error_count: 0}, {:reply, from, {:ok, positions}}}
       {:error, reason} ->
         open_circuit(from, data, reason, @time_to_half_open_delay)
     end
